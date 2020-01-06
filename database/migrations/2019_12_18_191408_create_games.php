@@ -19,7 +19,7 @@ class CreateGames extends Migration
             $table->bigInteger('idbgg')->nullable($value = true);
             $table->string('title');
             $table->text('description')->nullable($value = true);
-            $table->year('yearpublished')->nullable($value = true);
+            $table->integer('yearpublished')->nullable($value = true);
             $table->decimal('bgggeekrating', 5, 3)->nullable($value = true);
             $table->decimal('bggavgrating', 5, 3)->nullable($value = true);
             $table->integer('bggnumvotes')->nullable($value = true);
