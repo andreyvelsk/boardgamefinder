@@ -47,7 +47,7 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        $result = Game::where('id', $id)->with('artists')->firstOrFail();
+        $result = Game::where('id', $id)->with('categories', 'mechanics', 'families', 'types', 'publishers')->firstOrFail();
         return $result;
     }
 
