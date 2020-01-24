@@ -22,14 +22,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
 
     //admin
-    Route::get(
-        '/', 
-        function() {
-            if (!view()->exists('admin.index')) {
-                $data = ['title' => 'Панель админа'];
-
-                return view('home', $data);
-            }
-        }
-    );
+    Route::get('/', 'Admin\GamesController@execute')->name('gamesList');
+    Route::match(['get', 'post', 'delete'], '/edit/{game}', ['uses'=>'Admin\GameEditController@execute', 'as'=>'gameEdit']);
 });
