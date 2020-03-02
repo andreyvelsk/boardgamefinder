@@ -10,6 +10,7 @@
 
 @section('content')
     @if(isset($games) && is_object($games))
+        {{$games->links()}}
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
