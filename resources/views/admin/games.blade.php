@@ -14,6 +14,7 @@
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
+                    <th scope="col">№</th>
                     <th scope="col">id</th>
                     <th scope="col">Имя</th>
                     <th scope="col">Действия</th>
@@ -22,6 +23,9 @@
             <tbody>
                 @foreach($games as $k=>$game)
                     <tr>
+                        <td>
+                            {!! $k + 1 !!}
+                        </td>
                         <td>
                             {!! $game->id !!}
                         </td>

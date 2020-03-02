@@ -23,6 +23,5 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
 
     //admin
     Route::get('/', 'Admin\GamesController@execute')->name('gamesList');
-    Route::match(['get', 'post', 'delete'], '/search', ['uses'=>'Admin\GamesController@search', 'as'=>'gamesSearch']);
     Route::match(['get', 'post', 'delete'], '/edit/{game}', ['uses'=>'Admin\GameEditController@execute', 'as'=>'gameEdit']);
 });
