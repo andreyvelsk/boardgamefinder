@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    protected $primaryKey = 'id';
     public function artists()
     {
         return $this->belongsToMany('App\Artist', 'games_artists', 'idgame', 'idartist');
@@ -14,7 +13,7 @@ class Game extends Model
 
     public function categories()
     {
-        return $this->belongsToMany('App\Category', 'games_categories', 'idgame', 'idcategory');
+        return $this->belongsToMany('App\Category', 'games_categories', 'idgame', 'idcategory', 'idbgg');
     }
 
     public function designers()

@@ -16,7 +16,7 @@ class CreateGames extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('idtesera')->nullable($value = true);
-            $table->bigInteger('idbgg')->nullable($value = true);
+            $table->unsignedBigInteger('idbgg')->nullable($value = true)->unique();
             $table->string('title');
             $table->text('description')->nullable($value = true);
             $table->integer('yearpublished')->nullable($value = true);
