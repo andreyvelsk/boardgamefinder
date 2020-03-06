@@ -25,4 +25,6 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
     Route::get('/', 'Admin\GamesController@execute')->name('gamesList');
     Route::get('/edit/{game}', ['uses'=>'Admin\GameEditController@getGame', 'as'=>'gameEdit']);
     Route::post('/edit/{game}', ['uses'=>'Admin\GameEditController@postGame', 'as'=>'gameEdit']);
+    Route::delete('/edit/{game}', ['uses'=>'Admin\GameEditController@deleteGame', 'as'=>'gameDelete']);
+    Route::delete('/edit/deletecategory/{game}', ['uses'=>'Admin\GameEditController@deleteCategory', 'as'=>'gameDeleteCategory']);
 });

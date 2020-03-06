@@ -28,4 +28,16 @@ class GameEditController extends Controller
             return redirect()->route('gameEdit', $game->id)->with('status','Страница успешно обновлена!');
         }
     }
+
+    public function deleteGame(Game $game) {
+        if($game->delete()){
+            return redirect()->route('gamesList')->with('status','Игра '.$game->title.' удалена!');
+        }
+    }
+
+    public function deleteCategory(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->categories()->detach($input['categoryid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Категория удалена!');
+    }
 }

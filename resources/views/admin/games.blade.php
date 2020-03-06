@@ -33,7 +33,13 @@
                             {!! $game->title !!}
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="{{route('gameEdit', ['game'=>$game->id])}}" role="button">edit</a>
+                            <div class="row justify-content-around">
+                                <a class="btn btn-primary" href="{{route('gameEdit', ['game'=>$game->id])}}" role="button">edit</a>
+                                {!!Form::open(['url'=>route('gameDelete', array('game'=>$game)), 'class'=>'form-horizontal', 'method' => 'DELETE', 'enctype'=>'multipart/form-data']) !!}
+                                {!! Form::button('X', ['type'=>'submit', 'class'=>'btn btn-danger']) !!}
+                                
+                                {!!Form::close() !!}
+                            </div>
                         </td>
                     </tr>
                 @endforeach

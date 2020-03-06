@@ -12,6 +12,7 @@
                     <th scope="col">#</th>
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +21,13 @@
                         <th scope="row">{{$key+1}}</th>
                         <td>{{$item->id}}</td>
                         <td>{{$item->name}}</td>
+                        <td>
+                            {!!Form::open(['url'=>route('gameDeleteCategory', array('game'=>$data['id'])), 'class'=>'form-horizontal', 'method' => 'DELETE', 'enctype'=>'multipart/form-data']) !!}
+                            {{ Form::hidden('categoryid', $item->id) }}
+                            {!! Form::button('X', ['type'=>'submit', 'class'=>'btn btn-danger']) !!}
+                            
+                            {!!Form::close() !!}
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
