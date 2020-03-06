@@ -9,13 +9,23 @@ use App\Game;
 class GameEditController extends Controller
 {
     //
-    public function execute($id) {
+    public function getGame($id) {
         $game = Game::where('id', $id)->with('categories', 'mechanics', 'families', 'types', 'publishers')->firstOrFail();
         
         $data=[
             'title'=>$game->title,
             'data'=>$game
         ];
-        return view('admin.gameedit', $data);
+        return view('admin.gameedit.game', $data);
+    }
+
+    public function postGame(Game $game, Request $request) {
+        $input = $request->except('_token');
+
+        $game->fill($input);
+        $game->save();
+        if($game->save()) {
+            return redirect()->route('gameEdit', $game->id)->with('status','Страница успешно обновлена!');
+        }
     }
 }
