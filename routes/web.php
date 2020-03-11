@@ -23,11 +23,13 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
 
     //admin
     Route::get('/', 'Admin\GamesController@execute')->name('gamesList');
+    //gameEdit
     Route::get('/edit/{game}', ['uses'=>'Admin\GameEditController@getGame', 'as'=>'gameEdit']);
     Route::post('/edit/{game}', ['uses'=>'Admin\GameEditController@postGame', 'as'=>'gameEdit']);
     Route::delete('/edit/{game}', ['uses'=>'Admin\GameEditController@deleteGame', 'as'=>'gameDelete']);
-    Route::delete('/edit/deletecategory/{game}', ['uses'=>'Admin\GameEditController@deleteCategory', 'as'=>'gameDeleteCategory']);
-
-    Route::get('/categories/json', ['uses'=>'Admin\CategoriesController@getAllJSON', 'as'=>'categoriesListJson']);
-    Route::get('/artists/json', ['uses'=>'Admin\ArtistsController@getAllJSON', 'as'=>'artistsListJson']);
+    //delete relations
+    Route::delete('/edit/delete/category/{game}', ['uses'=>'Admin\GameEditController@deleteCategory', 'as'=>'gameDeleteCategory']);
+    Route::delete('/edit/delete/mechanic/{game}', ['uses'=>'Admin\GameEditController@deleteMechanic', 'as'=>'gameDeleteMechanic']);
+    Route::delete('/edit/delete/family/{game}', ['uses'=>'Admin\GameEditController@deleteFamily', 'as'=>'gameDeleteFamily']);
+    Route::delete('/edit/delete/publisher/{game}', ['uses'=>'Admin\GameEditController@deletePublisher', 'as'=>'gameDeletePublisher']);
 });

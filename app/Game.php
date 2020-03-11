@@ -14,7 +14,7 @@ class Game extends Model
 
     public function categories()
     {
-        return $this->belongsToMany('App\Category', 'games_categories', 'idgame', 'idcategory', 'idbgg');
+        return $this->belongsToMany('App\Category', 'games_categories', 'idgame', 'idcategory');
     }
 
     public function designers()

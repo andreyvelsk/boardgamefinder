@@ -40,4 +40,22 @@ class GameEditController extends Controller
         if($game->categories()->detach($input['categoryid']))
             return redirect()->route('gameEdit', $game->id)->with('status','Категория удалена!');
     }
+
+    public function deleteMechanic(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->mechanics()->detach($input['mechanicid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Механика удалена!');
+    }
+
+    public function deleteFamily(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->families()->detach($input['familyid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Семейство удалено!');
+    }
+
+    public function deletePublisher(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->publishers()->detach($input['publisherid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Издатель удалено!');
+    }
 }
