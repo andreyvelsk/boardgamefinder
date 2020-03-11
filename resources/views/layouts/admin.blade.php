@@ -8,6 +8,7 @@
     <title>Admin</title>
 </head>
 <body>
+<div id="app">
     @yield('header')
     <div class="container-fluid">
 
@@ -21,5 +22,7 @@
             </div>
         </div>
     </div>
+</div>
 </body>
+<script src="{{URL::asset('js/app.js') }}" defer></script>
 </html>
