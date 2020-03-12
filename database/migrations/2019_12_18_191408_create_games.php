@@ -24,7 +24,7 @@ class CreateGames extends Migration
             $table->decimal('bggavgrating', 5, 3)->nullable($value = true);
             $table->integer('bggnumvotes')->nullable($value = true);
             $table->text('thumbnail')->nullable($value = true);
-            $table->integer('mainplayers')->nullable($value = true);
+            $table->integer('minplayers')->nullable($value = true);
             $table->integer('maxplayers')->nullable($value = true);
             $table->integer('suggestedplayers')->nullable($value = true);
             $table->integer('minage')->nullable($value = true);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
-    protected $fillable = ['title', 'idtesera', 'idbgg', 'yearpublished', 'bgggeekrating', 'bggavgrating', 'bggnumvotes', 'mainplayers', 'maxplayers', 'suggestedplayers', 'minage', 'suggestedage', 'gameweight', 'minplaytime', 'maxplaytime', 'description', 'isexpansion']; 
+    protected $fillable = ['title', 'idtesera', 'idbgg', 'yearpublished', 'bgggeekrating', 'bggavgrating', 'bggnumvotes', 'minplayers', 'maxplayers', 'suggestedplayers', 'minage', 'suggestedage', 'gameweight', 'minplaytime', 'maxplaytime', 'description', 'isexpansion']; 
     public function artists()
     {
         return $this->belongsToMany('App\Artist', 'games_artists', 'idgame', 'idartist');
