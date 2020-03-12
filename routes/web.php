@@ -23,13 +23,19 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
 
     //admin
     Route::get('/', 'Admin\GamesController@execute')->name('gamesList');
-    //gameEdit
-    Route::get('/edit/{game}', ['uses'=>'Admin\GameEditController@getGame', 'as'=>'gameEdit']);
-    Route::post('/edit/{game}', ['uses'=>'Admin\GameEditController@postGame', 'as'=>'gameEdit']);
-    Route::delete('/edit/{game}', ['uses'=>'Admin\GameEditController@deleteGame', 'as'=>'gameDelete']);
-    //delete relations
-    Route::delete('/edit/delete/category/{game}', ['uses'=>'Admin\GameEditController@deleteCategory', 'as'=>'gameDeleteCategory']);
-    Route::delete('/edit/delete/mechanic/{game}', ['uses'=>'Admin\GameEditController@deleteMechanic', 'as'=>'gameDeleteMechanic']);
-    Route::delete('/edit/delete/family/{game}', ['uses'=>'Admin\GameEditController@deleteFamily', 'as'=>'gameDeleteFamily']);
-    Route::delete('/edit/delete/publisher/{game}', ['uses'=>'Admin\GameEditController@deletePublisher', 'as'=>'gameDeletePublisher']);
+
+    //gameEdit;
+    Route::group(['prefix'=>'edit','middleware'=>'auth'], function() {
+            Route::get('{game}', ['uses'=>'Admin\GameEditController@getGame', 'as'=>'gameEdit']);
+            Route::post('{game}', ['uses'=>'Admin\GameEditController@postGame', 'as'=>'gameEdit']);
+            Route::delete('{game}', ['uses'=>'Admin\GameEditController@deleteGame', 'as'=>'gameDelete']);
+            //delete relations
+            Route::group(['prefix'=>'delete','middleware'=>'auth'], function() {
+                Route::delete('category/{game}', ['uses'=>'Admin\GameEditController@deleteCategory', 'as'=>'gameDeleteCategory']);
+                Route::delete('mechanic/{game}', ['uses'=>'Admin\GameEditController@deleteMechanic', 'as'=>'gameDeleteMechanic']);
+                Route::delete('family/{game}', ['uses'=>'Admin\GameEditController@deleteFamily', 'as'=>'gameDeleteFamily']);
+                Route::delete('publisher/{game}', ['uses'=>'Admin\GameEditController@deletePublisher', 'as'=>'gameDeletePublisher']);
+                Route::delete('type/{game}', ['uses'=>'Admin\GameEditController@deleteType', 'as'=>'gameDeleteType']);
+        });
+    });
 });

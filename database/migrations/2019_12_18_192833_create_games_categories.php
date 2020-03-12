@@ -18,7 +18,7 @@ class CreateGamesCategories extends Migration
             $table->unsignedBigInteger('idcategory');
             $table->timestamps();
             $table->foreign('idgame')
-            ->references('idbgg')->on('games')
+            ->references('id')->on('games')
             ->onDelete('cascade');
             $table->foreign('idcategory')
             ->references('id')->on('categories')

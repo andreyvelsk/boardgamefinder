@@ -56,6 +56,11 @@ class GameEditController extends Controller
     public function deletePublisher(Game $game, Request $request) {
         $input = $request->except('_token');
         if($game->publishers()->detach($input['publisherid']))
-            return redirect()->route('gameEdit', $game->id)->with('status','Издатель удалено!');
+            return redirect()->route('gameEdit', $game->id)->with('status','Издатель удален!');
+    }
+    public function deleteType(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->types()->detach($input['typeid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Тип удален!');
     }
 }
