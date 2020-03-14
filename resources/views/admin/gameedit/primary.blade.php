@@ -89,7 +89,7 @@
         <div class="form-group">
                 {!!Form::label('suggestedplayers', 'suggestedplayers', ['class'=>'control-label'])!!}
                 <div>
-                    {!! Form::text('suggestedplayers', $data['maxplayers'], ['class'=>'form-control']) !!}
+                    {!! Form::text('suggestedplayers', $data['suggestedplayers'], ['class'=>'form-control']) !!}
                 </div>
         </div>
     </div>
