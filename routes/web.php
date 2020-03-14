@@ -43,9 +43,10 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
 Route::group(['prefix'=>'parser'], function() {
     Route::group(['prefix'=>'bgg'], function() {
         Route::get('{game}', ['uses'=>'Parse\BGG@getBggInfo', 'as'=>'parseGameBgg']);
+        Route::get('/all/{page}', ['uses'=>'Parse\BGG@getBggInfoAll', 'as'=>'gamesAllBgg']);
     });
     Route::group(['prefix'=>'tesera'], function() {
-        Route::get('{game}', ['uses'=>'Parse\Tesera@getGameInfo', 'as'=>'gamesListTesera']);
+        Route::get('{game}', ['uses'=>'Parse\Tesera@getGameInfo', 'as'=>'parseGameTesera']);
         Route::get('/all/{page}', ['uses'=>'Parse\Tesera@getGamesAll', 'as'=>'gamesAllTesera']);
     });
 });

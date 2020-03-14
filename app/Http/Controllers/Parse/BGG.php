@@ -25,6 +25,17 @@ class BGG extends Controller
         if($input['refresh'])
             return redirect()->route('gameEdit', $game->id)->with('status','Загружены данные с bgg!');
     }
+
+    public function getBggInfoAll() {
+        $games = Game::whereNotNull('idbgg')->orderBy('updated_at', 'ASC')->take(10)->get();
+        foreach ($games as $key => $game) {
+            if($game->idbgg) {
+                $this->getBggApi($game);
+                $this->getBggHtml($game);
+            }
+        }
+    }
+
     public function getBggApi(Game $game) {
         $xml = simplexml_load_file("https://api.geekdo.com/xmlapi2/thing?id=".$game->idbgg);
         $xmlGame = $xml->item;
