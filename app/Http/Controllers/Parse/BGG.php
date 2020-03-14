@@ -13,7 +13,7 @@ use App\Artist;
 use App\Designer;
 use App\Type;
 
-class Parser extends Controller
+class BGG extends Controller
 {
     public function getBggInfo(Game $game, Request $request) {
         if($game->idbgg) {

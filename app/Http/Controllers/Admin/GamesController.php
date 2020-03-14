@@ -10,7 +10,7 @@ class GamesController extends Controller
 {
     public function execute(Request $request){
         if(view()->exists('admin.games')) {
-            $games = Game::paginate();
+            $games = Game::orderBy('id', 'DESC')->paginate();
             $search=null;
             if ( !empty( $request->input('q') ) ) {
                 $input = $request->except('_token');
