@@ -42,6 +42,6 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
 
 Route::group(['prefix'=>'parser'], function() {
     Route::group(['prefix'=>'bgg'], function() {
-        Route::get('{game}', ['uses'=>'Parse\Parser@getBggApi', 'as'=>'parseBgg']);
+        Route::get('{game}', ['uses'=>'Parse\Parser@getBggInfo', 'as'=>'parseBgg']);
     });
 });
