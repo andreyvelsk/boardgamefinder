@@ -140,6 +140,84 @@
             </table>
         </section>
 
+        <section id="expansionfor">
+            <div class="d-flex justify-content-between align-items-center">
+                Expansions
+                <button type="button" class="btn btn-success">
+                    Добавить
+                </button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data->expansions as $key=>$item)
+                        <tr>
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$item->id}}</td>
+                            <td>
+                                <a href="{{route('gameEdit', ['game'=>$item->id])}}" role="button" target="_blank" rel="noreferrer noopener">
+                                    {{$item->title}}
+                                </a>
+                            </td>
+                            <td>
+                                {!!Form::open(['url'=>route('gameDeleteExpansion', array('game'=>$data['id'])), 'class'=>'form-horizontal', 'method' => 'DELETE', 'enctype'=>'multipart/form-data']) !!}
+                                {{ Form::hidden('expansionid', $item->id) }}
+                                {!! Form::button('X', ['type'=>'submit', 'class'=>'btn btn-danger']) !!}
+                                
+                                {!!Form::close() !!}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+
+        <section id="expansions">
+            <div class="d-flex justify-content-between align-items-center">
+                Expansion For
+                <button type="button" class="btn btn-success">
+                    Добавить
+                </button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data->expansionFor as $key=>$item)
+                        <tr>
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$item->id}}</td>
+                            <td>
+                                <a href="{{route('gameEdit', ['game'=>$item->id])}}" role="button" target="_blank" rel="noreferrer noopener">
+                                    {{$item->title}}
+                                </a>
+                            </td>
+                            <td>
+                                {!!Form::open(['url'=>route('gameDeleteExpansion', array('game'=>$data['id'])), 'class'=>'form-horizontal', 'method' => 'DELETE', 'enctype'=>'multipart/form-data']) !!}
+                                {{ Form::hidden('expansionid', $item->id) }}
+                                {!! Form::button('X', ['type'=>'submit', 'class'=>'btn btn-danger']) !!}
+                                
+                                {!!Form::close() !!}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+
         <section id="publishers">
             <div class="d-flex justify-content-between align-items-center">
                 Publishers

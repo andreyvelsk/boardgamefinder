@@ -17,6 +17,16 @@ class Game extends Model
         return $this->belongsToMany('App\Category', 'games_categories', 'idgame', 'idcategory');
     }
 
+    public function expansions()
+    {
+        return $this->belongsToMany('App\Game', 'games_expansions', 'idgame', 'idexpansion');
+    }
+
+    public function expansionFor()
+    {
+        return $this->belongsToMany('App\Game', 'games_expansions', 'idexpansion', 'idgame');
+    }
+
     public function designers()
     {
         return $this->belongsToMany('App\Designer', 'games_designers', 'idgame', 'iddesigner');

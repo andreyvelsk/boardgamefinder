@@ -70,6 +70,7 @@ class BGG extends Controller
     
             //SET game mechanics, categories and etc.
             foreach ($xml->item->link as $link) {
+                $catid = NULL;
                 if($link['inbound'] != "true") $catid = $link['id']->__toString();
                 $item['id']=$catid;
                 $item['name']=$link['value'];
@@ -144,6 +145,22 @@ class BGG extends Controller
                             $result['relations'][] =  "pivot saved: " . $item['name'];
                         } catch (\Throwable $th) {
                             $result['relations'][] = $th->getMessage();
+                        }
+                    break;
+
+                    case 'boardgameexpansion':
+                        if($item['id']) {
+                            $relation = Game::firstOrNew(array('idbgg' => $item['id']));
+                            if(!$relation->exists) {
+                                $relation->title = $item['name'];
+                                $relation->save();
+                            }
+                            try {
+                                $game->expansions()->save($relation);
+                                $result['relations'][] =  "pivot saved: " . $item['name'];
+                            } catch (\Throwable $th) {
+                                $result['relations'][] = $th->getMessage();
+                            }
                         }
                     break;
                     

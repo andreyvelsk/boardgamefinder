@@ -11,7 +11,7 @@ class GameEditController extends Controller
 {
     //
     public function getGame($id) {
-        $game = Game::where('id', $id)->with('categories', 'mechanics', 'families', 'types', 'publishers', 'artists', 'designers')->firstOrFail();
+        $game = Game::where('id', $id)->with('categories', 'mechanics', 'families', 'types', 'publishers', 'artists', 'designers', 'expansions', 'expansionFor')->firstOrFail();
         
         $data=[
             'title'=>$game->title,
@@ -61,6 +61,12 @@ class GameEditController extends Controller
         $input = $request->except('_token');
         if($game->categories()->detach($input['categoryid']))
             return redirect()->route('gameEdit', $game->id)->with('status','Категория удалена!');
+    }
+
+    public function deleteExpansion(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->expansions()->detach($input['expansionid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Дополнение удалено!');
     }
 
     public function deleteMechanic(Game $game, Request $request) {
