@@ -6,14 +6,20 @@
 
 @if(isset($data))
 @section('aditional')
-    @if(isset($data['idbgg']))
-        <div>
-            {!!Form::open(['url'=>route('parseGameBgg', array('game'=>$data['id'])), 'class'=>'form-horizontal', 'method' => 'GET', 'enctype'=>'multipart/form-data']) !!}
-                <input type="hidden" name="refresh" value="1">
-                {!! Form::button('get BGG info', ['type'=>'submit', 'class'=>'btn btn-primary']) !!}
-            {!!Form::close() !!}
+        <div class="d-flex justify-content-between">
+            <div>
+                {!!Form::open(['url'=>route('parseGameBgg', array('game'=>$data['id'])), 'class'=>'form-horizontal', 'method' => 'GET', 'enctype'=>'multipart/form-data']) !!}
+                    <input type="hidden" name="refresh" value="1">
+                    @if(isset($data['idbgg']))
+                        {!! Form::button('get BGG info', ['type'=>'submit', 'class'=>'btn btn-primary']) !!}
+                    @else
+                    @endif
+                {!!Form::close() !!}
+            </div>
+            <div>
+                {{$data['updated_at']}}
+            </div>
         </div>
-    @endif
 @endsection
 
 @section('content')
