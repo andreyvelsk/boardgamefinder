@@ -172,14 +172,16 @@ class BGG extends Controller
         $typeString = substr($htmlData, $typeStringStart, $typeStringEnd - $typeStringStart + 1);
         $types = json_decode($typeString);
 
-        foreach ($types as $type) {
-            $relation = Type::firstOrNew(array('id' => $type->objectid));
-            $relation->name = $type->name;
-            $relation->save();
-            try {
-                $game->types()->save($relation);
-            } catch (\Throwable $th) {
-
+        if($types){
+            foreach ($types as $type) {
+                $relation = Type::firstOrNew(array('id' => $type->objectid));
+                $relation->name = $type->name;
+                $relation->save();
+                try {
+                    $game->types()->save($relation);
+                } catch (\Throwable $th) {
+    
+                }
             }
         }
 
