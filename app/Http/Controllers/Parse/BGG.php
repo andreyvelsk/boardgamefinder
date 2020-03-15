@@ -48,7 +48,7 @@ class BGG extends Controller
                 $isExpansion = true;
                 break;
             default:
-                $isExpansion = NULL; 
+                $isExpansion = false;
         }
 
         $data['thumbnail'] = $xmlGame->thumbnail->__toString();
