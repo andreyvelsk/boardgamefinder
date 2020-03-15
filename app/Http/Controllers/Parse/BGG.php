@@ -152,7 +152,7 @@ class BGG extends Controller
                 break;
             }
         }
-        print_r($result);
+        print_r(json_encode($result));
     }
 
     function getBggHtml(Game $game) {
