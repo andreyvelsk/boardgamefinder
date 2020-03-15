@@ -36,6 +36,8 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
                 Route::delete('family/{game}', ['uses'=>'Admin\GameEditController@deleteFamily', 'as'=>'gameDeleteFamily']);
                 Route::delete('publisher/{game}', ['uses'=>'Admin\GameEditController@deletePublisher', 'as'=>'gameDeletePublisher']);
                 Route::delete('type/{game}', ['uses'=>'Admin\GameEditController@deleteType', 'as'=>'gameDeleteType']);
+                Route::delete('artist/{game}', ['uses'=>'Admin\GameEditController@deleteArtist', 'as'=>'gameDeleteArtist']);
+                Route::delete('designer/{game}', ['uses'=>'Admin\GameEditController@deleteDesigner', 'as'=>'gameDeleteDesigner']);
         });
     });
 });

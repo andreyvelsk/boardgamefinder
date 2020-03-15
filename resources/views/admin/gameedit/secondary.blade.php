@@ -174,5 +174,75 @@
                 </tbody>
             </table>
         </section>
+
+        <section id="artists">
+            <div class="d-flex justify-content-between align-items-center">
+                Artists
+                <button type="button" class="btn btn-success">
+                    Добавить
+                </button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data->artists as $key=>$item)
+                        <tr>
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$item->id}}</td>
+                            <td>{{$item->name}}</td>
+                            <td>
+                                {!!Form::open(['url'=>route('gameDeleteArtist', array('game'=>$data['id'])), 'class'=>'form-horizontal', 'method' => 'DELETE', 'enctype'=>'multipart/form-data']) !!}
+                                {{ Form::hidden('artistid', $item->id) }}
+                                {!! Form::button('X', ['type'=>'submit', 'class'=>'btn btn-danger']) !!}
+                                
+                                {!!Form::close() !!}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
+
+        <section id="designers">
+            <div class="d-flex justify-content-between align-items-center">
+                Designers
+                <button type="button" class="btn btn-success">
+                    Добавить
+                </button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($data->designers as $key=>$item)
+                        <tr>
+                            <th scope="row">{{$key+1}}</th>
+                            <td>{{$item->id}}</td>
+                            <td>{{$item->name}}</td>
+                            <td>
+                                {!!Form::open(['url'=>route('gameDeleteDesigner', array('game'=>$data['id'])), 'class'=>'form-horizontal', 'method' => 'DELETE', 'enctype'=>'multipart/form-data']) !!}
+                                {{ Form::hidden('designer', $item->id) }}
+                                {!! Form::button('X', ['type'=>'submit', 'class'=>'btn btn-danger']) !!}
+                                
+                                {!!Form::close() !!}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
     </div>
 </div>

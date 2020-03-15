@@ -11,7 +11,7 @@ class GameEditController extends Controller
 {
     //
     public function getGame($id) {
-        $game = Game::where('id', $id)->with('categories', 'mechanics', 'families', 'types', 'publishers')->firstOrFail();
+        $game = Game::where('id', $id)->with('categories', 'mechanics', 'families', 'types', 'publishers', 'artists', 'designers')->firstOrFail();
         
         $data=[
             'title'=>$game->title,
@@ -84,5 +84,17 @@ class GameEditController extends Controller
         $input = $request->except('_token');
         if($game->types()->detach($input['typeid']))
             return redirect()->route('gameEdit', $game->id)->with('status','Тип удален!');
+    }
+
+    public function deleteArtist(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->artists()->detach($input['artistid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Создатель удален!');
+    }
+
+    public function deleteDesigner(Game $game, Request $request) {
+        $input = $request->except('_token');
+        if($game->designers()->detach($input['designerid']))
+            return redirect()->route('gameEdit', $game->id)->with('status','Дизайнер удален!');
     }
 }
