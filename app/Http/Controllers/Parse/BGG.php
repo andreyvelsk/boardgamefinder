@@ -30,8 +30,8 @@ class BGG extends Controller
         $games = Game::whereNotNull('idbgg')->orderBy('updated_at', 'ASC')->take(10)->get();
         foreach ($games as $key => $game) {
             if($game->idbgg) {
-                $this->getBggApi($game);
-                $this->getBggHtml($game);
+                if($this->getBggApi($game))
+                    $this->getBggHtml($game);
             }
         }
     }
@@ -152,10 +152,12 @@ class BGG extends Controller
                     break;
                 }
             }
+            return true;
         }
         else {
             $game->idbgg=NULL;
             $game->save();
+            return false;
         }
 
         print_r(json_encode($result));
