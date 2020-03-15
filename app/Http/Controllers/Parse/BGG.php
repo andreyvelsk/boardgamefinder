@@ -39,6 +39,7 @@ class BGG extends Controller
     public function getBggApi(Game $game) {
         $xml = simplexml_load_file("https://api.geekdo.com/xmlapi2/thing?id=".$game->idbgg);
         $xmlGame = $xml->item;
+        $result = [];
         switch ($xmlGame['type']) {
             case "boardgame":
                 $isExpansion = false;
@@ -151,6 +152,7 @@ class BGG extends Controller
                 break;
             }
         }
+        print_r($result);
     }
 
     function getBggHtml(Game $game) {
