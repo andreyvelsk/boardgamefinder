@@ -19,15 +19,16 @@
     <div class="col-md-4">
         <div class="form-group">
             {!!Form::label('idtesera', 'idtesera', ['class'=>'control-label'])!!}
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-9">
                     {!! Form::number('idtesera', $data['idtesera'], ['class'=>'form-control']) !!}
                 </div>
                 <div class="col-3">
-                    <a href="/home" class="icon-block">
-                        <i class="icon-home icon-4x"></i>
-                        <span>Home</span>
-                    </a>
+                    @if(isset($data['idtesera']))
+                        <a href="https://tesera.ru/game/{{$data['idtesera']}}" target="_blank" rel="noreferrer noopener">
+                            &#127922;
+                        </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -35,8 +36,17 @@
     <div class="col-md-4">
         <div class="form-group">
             {!!Form::label('idbgg', 'idbgg', ['class'=>'control-label'])!!}
-            <div>
-                {!! Form::number('idbgg', $data['idbgg'], ['class'=>'form-control']) !!}
+            <div class="row align-items-center">
+                <div class="col-9">
+                    {!! Form::number('idbgg', $data['idbgg'], ['class'=>'form-control']) !!}
+                </div>
+                <div class="col-3">
+                    @if(isset($data['idbgg']))
+                        <a href="https://boardgamegeek.com/boardgame/{{$data['idbgg']}}" target="_blank" rel="noreferrer noopener">
+                            &#127922;
+                        </a>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
