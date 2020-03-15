@@ -36,8 +36,8 @@ class GameEditController extends Controller
             'minage' => 'integer|nullable|min:1|max:99',
             'suggestedage' => 'integer|nullable|min:1|max:99',
             'gameweight' => 'nullable|regex:/^(-)?[0-9]{1}+(\.[0-9]{1,3})?$/',
-            'minplaytime' => 'integer|nullable|min:1|max:99',
-            'maxplaytime' => 'integer|nullable|min:1|max:99',
+            'minplaytime' => 'integer|nullable|min:1|max:999',
+            'maxplaytime' => 'integer|nullable|min:1|max:999',
         );
         $v = Validator::make($input, $rules);
         if ($v->fails())

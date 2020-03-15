@@ -36,9 +36,12 @@ class Tesera extends Controller
                     return false;
                 }
                 $game = Game::firstOrNew(array('idtesera' => $gameInfo['teseraId']));
-                $game->idtesera = $gameInfo['teseraId'];
-                if($gameInfo['bggId'] != 0)
+                if($gameInfo['bggId'] != 0) {
+                    $game1 = Game::firstOrNew(array('idbgg' => $gameInfo['bggId']));
+                    if($game1->exists) $game = $game1;
                     $game->idbgg = $gameInfo['bggId'];
+                }
+                $game->idtesera = $gameInfo['teseraId'];
                 $game->title = $gameInfo['title'];
                 if(array_key_exists('bggGeekRating', $gameInfo))
                     $game->bgggeekrating = $gameInfo['bggGeekRating'];
