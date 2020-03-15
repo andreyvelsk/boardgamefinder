@@ -153,6 +153,10 @@ class BGG extends Controller
                 }
             }
         }
+        else {
+            $game->idbgg=NULL;
+            $game->save();
+        }
 
         print_r(json_encode($result));
     }
