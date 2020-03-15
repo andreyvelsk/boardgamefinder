@@ -63,7 +63,7 @@ class BGG extends Controller
         $game->fill($data);
         try {
             $game->save();
-            $result['apimessage'] = "api game data saved";
+            $result['apimessage'] = "api game ".$game->id." data saved";
         } catch (\Throwable $th) {
             $result['apimessage'] = $th->getMessage();
         }
@@ -152,7 +152,7 @@ class BGG extends Controller
                 break;
             }
         }
-        print_r($result);
+        print_r(json_encode($result));
     }
 
     function getBggHtml(Game $game) {
