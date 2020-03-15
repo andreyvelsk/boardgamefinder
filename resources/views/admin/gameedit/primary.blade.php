@@ -19,8 +19,16 @@
     <div class="col-md-4">
         <div class="form-group">
             {!!Form::label('idtesera', 'idtesera', ['class'=>'control-label'])!!}
-            <div>
-                {!! Form::text('idtesera', $data['idtesera'], ['class'=>'form-control']) !!}
+            <div class="row">
+                <div class="col-9">
+                    {!! Form::number('idtesera', $data['idtesera'], ['class'=>'form-control']) !!}
+                </div>
+                <div class="col-3">
+                    <a href="/home" class="icon-block">
+                        <i class="icon-home icon-4x"></i>
+                        <span>Home</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -28,7 +36,7 @@
         <div class="form-group">
             {!!Form::label('idbgg', 'idbgg', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('idbgg', $data['idbgg'], ['class'=>'form-control']) !!}
+                {!! Form::number('idbgg', $data['idbgg'], ['class'=>'form-control']) !!}
             </div>
         </div>
     </div>
@@ -36,7 +44,7 @@
         <div class="form-group">
             {!!Form::label('yearpublished', 'yearpublished', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('yearpublished', $data['yearpublished'], ['class'=>'form-control']) !!}
+                {!! Form::number('yearpublished', $data['yearpublished'], ['class'=>'form-control']) !!}
             </div>
         </div>
     </div>
@@ -47,7 +55,7 @@
         <div class="form-group">
             {!!Form::label('bgggeekrating', 'bgggeekrating', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('bgggeekrating', $data['bgggeekrating'], ['class'=>'form-control']) !!}
+                {!! Form::number('bgggeekrating', $data['bgggeekrating'], ['class'=>'form-control', 'step' => '0.001']) !!}
             </div>
         </div>
     </div>
@@ -55,7 +63,7 @@
         <div class="form-group">
             {!!Form::label('bggavgrating', 'bggavgrating', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('bggavgrating', $data['bggavgrating'], ['class'=>'form-control']) !!}
+                {!! Form::number('bggavgrating', $data['bggavgrating'], ['class'=>'form-control', 'step' => '0.001']) !!}
             </div>
         </div>
     </div>
@@ -63,7 +71,7 @@
         <div class="form-group">
             {!!Form::label('bggnumvotes', 'bggnumvotes', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('bggnumvotes', $data['bggnumvotes'], ['class'=>'form-control']) !!}
+                {!! Form::number('bggnumvotes', $data['bggnumvotes'], ['class'=>'form-control']) !!}
             </div>
         </div>
     </div>
@@ -73,7 +81,7 @@
         <div class="form-group">
                 {!!Form::label('minplayers', 'minplayers', ['class'=>'control-label'])!!}
                 <div>
-                    {!! Form::text('minplayers', $data['minplayers'], ['class'=>'form-control']) !!}
+                    {!! Form::number('minplayers', $data['minplayers'], ['class'=>'form-control']) !!}
                 </div>
         </div>
     </div>
@@ -81,7 +89,7 @@
         <div class="form-group">
                 {!!Form::label('maxplayers', 'maxplayers', ['class'=>'control-label'])!!}
                 <div>
-                    {!! Form::text('maxplayers', $data['maxplayers'], ['class'=>'form-control']) !!}
+                    {!! Form::number('maxplayers', $data['maxplayers'], ['class'=>'form-control']) !!}
                 </div>
         </div>
     </div>
@@ -89,7 +97,7 @@
         <div class="form-group">
                 {!!Form::label('suggestedplayers', 'suggestedplayers', ['class'=>'control-label'])!!}
                 <div>
-                    {!! Form::text('suggestedplayers', $data['suggestedplayers'], ['class'=>'form-control']) !!}
+                    {!! Form::number('suggestedplayers', $data['suggestedplayers'], ['class'=>'form-control']) !!}
                 </div>
         </div>
     </div>
@@ -99,7 +107,7 @@
         <div class="form-group">
             {!!Form::label('minage', 'minage', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('minage', $data['minage'], ['class'=>'form-control']) !!}
+                {!! Form::number('minage', $data['minage'], ['class'=>'form-control']) !!}
             </div>
         </div>
     </div>
@@ -107,7 +115,7 @@
         <div class="form-group">
             {!!Form::label('suggestedage', 'suggestedage', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('suggestedage', $data['suggestedage'], ['class'=>'form-control']) !!}
+                {!! Form::number('suggestedage', $data['suggestedage'], ['class'=>'form-control']) !!}
             </div>
         </div>
     </div>
@@ -115,7 +123,7 @@
         <div class="form-group">
             {!!Form::label('gameweight', 'gameweight', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('gameweight', $data['gameweight'], ['class'=>'form-control']) !!}
+                {!! Form::number('gameweight', $data['gameweight'], ['class'=>'form-control', 'step' => '0.01']) !!}
             </div>
         </div>
     </div>
@@ -125,7 +133,7 @@
         <div class="form-group">
             {!!Form::label('minplaytime', 'minplaytime', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('minplaytime', $data['minplaytime'], ['class'=>'form-control']) !!}
+                {!! Form::number('minplaytime', $data['minplaytime'], ['class'=>'form-control']) !!}
             </div>
         </div>
     </div>
@@ -133,7 +141,7 @@
         <div class="form-group">
             {!!Form::label('maxplaytime', 'maxplaytime', ['class'=>'control-label'])!!}
             <div>
-                {!! Form::text('maxplaytime', $data['maxplaytime'], ['class'=>'form-control']) !!}
+                {!! Form::number('maxplaytime', $data['maxplaytime'], ['class'=>'form-control']) !!}
             </div>
         </div>
     </div>
