@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('/game', 'GameController', [
     'except' => ['edit', 'create', 'update']
 ]);
+
+Route::post('/recomendations', 'Recomendation\Recomendation@getCategories')->name('getRecomendation');
