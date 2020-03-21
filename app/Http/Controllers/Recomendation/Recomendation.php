@@ -19,6 +19,7 @@ class Recomendation extends Controller
     }
 
     public function getRelations (Request $request) {
+        $result=[];
         $rules = array(
             'games.*.id' => 'required|int|exists:games',
             'games.*.rating' => 'required|int|min:1|max:10'
@@ -26,7 +27,9 @@ class Recomendation extends Controller
         $v = Validator::make($request->all(), $rules);
         if ($v->fails()) {
             $errors = $v->errors();
-            return $errors->toJson();
+            $result['status']='bad';
+            $result['message']=$errors->toJson();
+            return $result;
         }
         //get list of ids with ratings
         foreach ($request->games as $key => $ugame) {
@@ -55,7 +58,7 @@ class Recomendation extends Controller
         $relations['categories'] = $games->pluck('categories')->collapse();
         $relations['families'] = $games->pluck('families')->collapse();
         $relations['mechanics'] = $games->pluck('mechanics')->collapse();
-        $result=[];
+        $returned=[];
         foreach ($relations as $key => $relation) {
             $res = $relation->groupBy('id')->map(function ($row, $key) {
                 return [
@@ -66,16 +69,18 @@ class Recomendation extends Controller
                     'bayes' => $this->getBayesValue($row->average('userrating'),$row->count())
                 ];
             })->sortByDesc('bayes');
-            $result[$key]=$res;
+            $returned[$key]=$res;
         }
-
+        $result['status']='ok';
+        $result['relations']=$returned;
         return $result;
     }
 
     public function getRecomendations(Request $request) {
         $relations = $this->getRelations($request);
+        if($relations['status']!='ok') return $relations;
         $games=collect();
-        foreach ($relations as $key => $relation) {
+        foreach ($relations['relations'] as $key => $relation) {
             $types=[];
             foreach ($relation as $rel) {
                 $types['ids'][] = $rel['id'];
