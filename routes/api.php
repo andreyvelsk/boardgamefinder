@@ -20,4 +20,4 @@ Route::resource('/game', 'GameController', [
     'except' => ['edit', 'create', 'update']
 ]);
 
-Route::post('/recomendations', 'Recomendation\Recomendation@getCategories')->name('getRecomendation');
+Route::post('/recomendations', 'Recomendation\Recomendation@getRecomendations')->name('getRecomendation');
