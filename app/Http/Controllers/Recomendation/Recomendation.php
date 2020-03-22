@@ -19,18 +19,6 @@ class Recomendation extends Controller
     }
 
     public function getRelations (Request $request) {
-        $result=[];
-        $rules = array(
-            'games.*.id' => 'required|int|exists:games',
-            'games.*.rating' => 'required|int|min:1|max:10'
-        );
-        $v = Validator::make($request->all(), $rules);
-        if ($v->fails()) {
-            $errors = $v->errors();
-            $result['status']='bad';
-            $result['message']=$errors->toJson();
-            return $result;
-        }
         //get list of ids with ratings
         foreach ($request->games as $key => $ugame) {
             $garray['ids'][] =  $ugame['id'];
@@ -60,6 +48,7 @@ class Recomendation extends Controller
         $relations['mechanics'] = $games->pluck('mechanics')->collapse();
         $returned=[];
         foreach ($relations as $key => $relation) {
+            if($relation->isEmpty()) continue;
             $res = $relation->groupBy('id')->map(function ($row, $key) {
                 return [
                     'id' => $key,
@@ -68,19 +57,30 @@ class Recomendation extends Controller
                     'count' => $row->count(),
                     'bayes' => $this->getBayesValue($row->average('userrating'),$row->count())
                 ];
-            })->sortByDesc('bayes');
+            })->sortByDesc('bayes')->values();
             $returned[$key]=$res;
         }
-        $result['status']='ok';
-        $result['relations']=$returned;
-        return $result;
+        return $returned;
     }
 
     public function getRecomendations(Request $request) {
+        $result=[];
+        $rules = array(
+            'games' => 'required',
+            'games.*.id' => 'required|int|exists:games',
+            'games.*.rating' => 'required|int|min:1|max:10'
+        );
+        $v = Validator::make($request->all(), $rules);
+        if ($v->fails()) {
+            $errors = $v->errors();
+            $result['status']='bad';
+            $result['message']=$errors->toJson();
+            return $result;
+        }
         $relations = $this->getRelations($request);
-        if($relations['status']!='ok') return $relations;
         $games=collect();
-        foreach ($relations['relations'] as $key => $relation) {
+        foreach ($relations as $key => $relation) {
+            if($relation->isEmpty()) continue;
             $types=[];
             foreach ($relation as $rel) {
                 $types['ids'][] = $rel['id'];
@@ -112,15 +112,20 @@ class Recomendation extends Controller
             $items = $items->pluck('games')->collapse();
             $games[]=$items;
         }
-        $games = $games->collapse()->where('isexpansion', '!=', 1)->groupBy('id')->sortByDesc('bgggeekrating')->map(function ($row, $key) {
+        $games = $games->collapse()->where('isexpansion', '!=', 1)->groupBy('id')->map(function ($row, $key) {
             return [
                 'id' => $key,
                 'title' => $row[0]['title'],
-                'rating' => $row[0]['bgggeekrating'],
+                'bgggeekrating' => (float)$row[0]['bgggeekrating'],
                 'matches' => $row->count(),
-                'weight' => $this->getBayesValue($row->average('bayes'),$row->count())
+                'gameweight' => $this->getBayesValue($row->average('bayes'),$row->count())
             ];
-        })->sortByDesc('weight');
-        return($games);
+        })->sortBy(function($row) { //sort by 2 fields in avg
+            return sprintf('%-12s%s', $row['gameweight'], $row['bgggeekrating']);
+        })->reverse()->values();
+        $result['status']='ok';
+        $result['relations']=$relations;
+        $result['games']=$games;
+        return $result;
     }
 }
