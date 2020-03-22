@@ -15,7 +15,7 @@ class Recomendation extends Controller
     private function getBayesValue($R, $v) {
         $m = 4;
         $C = 5.978;
-        return round( (($v / ($v+$m)) * $R + ($m / ($v+$m)) * $C), 3);
+        return round( (($v / ($v+$m)) * $R + ($m / ($v+$m)) * $C), 5);
     }
 
     public function getRelations (Request $request) {
@@ -101,7 +101,7 @@ class Recomendation extends Controller
                     $items = Mechanic::whereIn('id', $types['ids'])->with('games')->get();
                 break;
                 default: 
-                    $items = ["games"=>[]];
+                    $items = collect();
                 break;
             }
             foreach ($items as $keytype => $type) {
@@ -112,17 +112,15 @@ class Recomendation extends Controller
             $items = $items->pluck('games')->collapse();
             $games[]=$items;
         }
-        $games = $games->collapse()->where('isexpansion', '!=', 1)->groupBy('id')->map(function ($row, $key) {
+        $games = $games->collapse()->groupBy('id')->map(function ($row, $key) {
             return [
                 'id' => $key,
                 'title' => $row[0]['title'],
                 'bgggeekrating' => (float)$row[0]['bgggeekrating'],
                 'matches' => $row->count(),
-                'gameweight' => $this->getBayesValue($row->average('bayes'),$row->count())
+                'gameweight' => $row->sum('bayes')
             ];
-        })->sortBy(function($row) { //sort by 2 fields in avg
-            return sprintf('%-12s%s', $row['gameweight'], $row['bgggeekrating']);
-        })->reverse()->values();
+        })->sortByDesc('gameweight')->values();
         $result['status']='ok';
         $result['relations']=$relations;
         $result['games']=$games;
