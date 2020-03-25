@@ -118,9 +118,9 @@ class Recomendation extends Controller
                 'title' => $row[0]['title'],
                 'bgggeekrating' => (float)$row[0]['bgggeekrating'],
                 'matches' => $row->count(),
-                'gameweight' => $row->sum('bayes')
+                'gameweight' => $this->getBayesValue($row->avg('bayes'), $row->count())
             ];
-        })->sortByDesc('gameweight')->values();
+        })->sortByDesc('gameweight')->values()->take(50);
         $result['status']='ok';
         $result['relations']=$relations;
         $result['games']=$games;
