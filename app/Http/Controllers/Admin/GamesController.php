@@ -15,7 +15,7 @@ class GamesController extends Controller
             if ( !empty( $request->input('q') ) ) {
                 $input = $request->except('_token');
                 $search = $input['q'];
-                $games = Game::where('title', 'like', '%'.$search.'%')->paginate()->setPath ( '' );
+                $games = Game::search($search, null, true)->paginate();
                 $games->appends ( array (
                     'q' => $search
                 ) );

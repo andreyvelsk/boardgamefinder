@@ -3,10 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Game extends Model
 {
+    use SearchableTrait;
     protected $fillable = ['title', 'idtesera', 'idbgg', 'yearpublished', 'bgggeekrating', 'bggavgrating', 'bggnumvotes', 'minplayers', 'maxplayers', 'suggestedplayers', 'minage', 'suggestedage', 'gameweight', 'minplaytime', 'maxplaytime', 'description', 'isexpansion']; 
+    protected $searchable = [
+        'columns' => [
+            'games.title' => 20
+        ]
+    ];
     public function artists()
     {
         return $this->belongsToMany('App\Artist', 'games_artists', 'idgame', 'idartist');

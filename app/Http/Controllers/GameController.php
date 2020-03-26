@@ -52,6 +52,15 @@ class GameController extends Controller
     }
 
     /**
+     * Display search result
+     */
+     public function search($request)
+     {
+        $result = Game::search($request, null, true)->select('id','title')->take(10)->get();
+         return $result;
+     }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Game  $game
