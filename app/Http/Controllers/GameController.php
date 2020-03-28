@@ -56,7 +56,7 @@ class GameController extends Controller
      */
      public function search($request)
      {
-        $result = Game::search($request, null, true)->select('id','title')->take(10)->get();
+        $result = Game::whereNotNull('idbgg')->where('isexpansion', '!=', '1')->search($request, null, true)->select('id','title')->take(10)->get();
          return $result;
      }
 
