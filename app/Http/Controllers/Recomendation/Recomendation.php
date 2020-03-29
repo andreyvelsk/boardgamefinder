@@ -111,6 +111,7 @@ class Recomendation extends Controller
             }
             $items = $items->pluck('games')->collapse();
             $games[]=$items;
+            unset($items);
         }
         $games = $games->collapse()->groupBy('id')->map(function ($row, $key) {
             return [
