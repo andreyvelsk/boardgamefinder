@@ -9,6 +9,6 @@ class Mechanic extends Model
     protected $fillable = ['id', 'name'];
 
     public function games() {
-        return $this->belongsToMany('App\Game', 'games_mechanics', 'idmechanic', 'idgame')->where('isexpansion', '!=', 1)->whereNotNull('idbgg');
+        return $this->belongsToMany('App\Game', 'games_mechanics', 'idmechanic', 'idgame')->select('id','title', 'bgggeekrating')->where('isexpansion', '!=', 1)->whereNotNull('idbgg');
     }
 }

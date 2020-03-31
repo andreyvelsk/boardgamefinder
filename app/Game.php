@@ -14,6 +14,7 @@ class Game extends Model
             'games.title' => 20
         ]
     ];
+    protected $hidden = ['pivot'];
     public function artists()
     {
         return $this->belongsToMany('App\Artist', 'games_artists', 'idgame', 'idartist');
