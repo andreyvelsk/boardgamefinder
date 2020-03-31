@@ -11,15 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix'=>'admin','middleware'=>'auth'], function() {
+Route::group(['domain'=>'admin.'.parse_url(config('app.url'), PHP_URL_HOST),'middleware'=>'auth'], function() {
 
     //admin
     Route::get('/', 'Admin\GamesController@execute')->name('gamesList');
