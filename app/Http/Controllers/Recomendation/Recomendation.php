@@ -24,8 +24,7 @@ class Recomendation extends Controller
             $garray['ids'][] =  $ugame['id'];
             $garray['ratings'][] = $ugame['rating'];
         }
-
-        $games = Game::whereIn('id', $garray['ids'])->with('types', 'categories', 'families', 'mechanics')->get();
+        $games = Game::whereIn('id', $garray['ids'])->select('id')->with('types', 'categories', 'families', 'mechanics')->get();
         //set ratings to $games collection
         foreach ($request->games as $key => $ugame) {
             $game = $games->find($ugame['id']);
@@ -121,7 +120,7 @@ class Recomendation extends Controller
                 'matches' => $row->count(),
                 'gameweight' => $this->getBayesValue($row->avg('bayes'), $row->count())
             ];
-        })->sortByDesc('gameweight')->values()->take(50);
+        })->sortByDesc('gameweight')->values()->take(100);
         $result['status']='ok';
         $result['relations']=$relations;
         $result['games']=$games;
