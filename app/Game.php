@@ -18,7 +18,7 @@ class Game extends Model
     
     public function attributes()
     {
-        return $this->belongsToMany('App\Attribute', 'games_attributes', 'idgame', 'idattribute');
+        return $this->belongsToMany('App\Attribute', 'games_attributes', 'idgame', 'idattribute')->whereIn('idattribute_type', [1,2,3,7]);
     }
 
     public function artists()

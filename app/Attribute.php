@@ -12,4 +12,8 @@ class Attribute extends Model
     {
         return $this->hasOne('App\AttributeType', 'id', 'idattribute_type');
     }
+    public function games()
+    {
+        return $this->belongsToMany('App\Game', 'games_attributes', 'idattribute', 'idgame')->select('id','title', 'bgggeekrating')->where('isexpansion', '!=', 1)->whereNotNull('idbgg');
+    }
 }

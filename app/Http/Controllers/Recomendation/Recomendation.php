@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Game;
+use App\Attribute;
 use App\Type;
 use App\Category;
 use App\Family;
@@ -24,40 +25,29 @@ class Recomendation extends Controller
             $garray['ids'][] =  $ugame['id'];
             $garray['ratings'][] = $ugame['rating'];
         }
-        $games = Game::whereIn('id', $garray['ids'])->select('id')->with('types', 'categories', 'families', 'mechanics')->get();
+        $games = Game::whereIn('id', $garray['ids'])->select('id')->with('attributes')->get();
         //set ratings to $games collection
         foreach ($request->games as $key => $ugame) {
             $game = $games->find($ugame['id']);
-            foreach ($game->types as $key => $category) {
-                $category->userrating=$ugame['rating'];
-            }
-            foreach ($game->categories as $key => $category) {
-                $category->userrating=$ugame['rating'];
-            }
-            foreach ($game->families as $key => $category) {
-                $category->userrating=$ugame['rating'];
-            }
-            foreach ($game->mechanics as $key => $category) {
+            foreach ($game->attributes as $key => $category) {
                 $category->userrating=$ugame['rating'];
             }
         }
-        $relations['types'] = $games->pluck('types')->collapse();
-        $relations['categories'] = $games->pluck('categories')->collapse();
-        $relations['families'] = $games->pluck('families')->collapse();
-        $relations['mechanics'] = $games->pluck('mechanics')->collapse();
-        $returned=[];
-        foreach ($relations as $key => $relation) {
-            if($relation->isEmpty()) continue;
+        $relation = $games->pluck('attributes')->collapse();
+        $returned=collect();
+        if(!$relation->isEmpty()) {
             $res = $relation->groupBy('id')->map(function ($row, $key) {
                 return [
                     'id' => $key,
-                    'name' => $row[0]['name'],
+                    'name' => $row[0]['bggname'],
                     'avgrating' => $row->average('userrating'),
+                    'idtype' => $row[0]['idattribute_type'],
+                    'type' => $row[0]->type->bggname,
                     'count' => $row->count(),
                     'bayes' => $this->getBayesValue($row->average('userrating'),$row->count())
                 ];
             })->sortByDesc('bayes')->values();
-            $returned[$key]=$res;
+            $returned=$res;
         }
         return $returned;
     }
@@ -77,42 +67,18 @@ class Recomendation extends Controller
             return $result;
         }
         $relations = $this->getRelations($request);
-        $games=collect();
-        foreach ($relations as $key => $relation) {
-            if($relation->isEmpty()) continue;
-            $types=[];
-            foreach ($relation as $rel) {
-                $types['ids'][] = $rel['id'];
-                $types['bayes'][] = $rel['bayes'];
-            }
-
-            switch ($key) {
-                case "types":
-                    $items = Type::whereIn('id', $types['ids'])->with('games')->get();
-                break;
-                case "categories":
-                    $items = Category::whereIn('id', $types['ids'])->with('games')->get();
-                break;
-                case "families":
-                    $items = Family::whereIn('id', $types['ids'])->with('games')->get();
-                break;
-                case "mechanics":
-                    $items = Mechanic::whereIn('id', $types['ids'])->with('games')->get();
-                break;
-                default: 
-                    $items = collect();
-                break;
-            }
-            foreach ($items as $keytype => $type) {
-                $type->games->each(function($item,$k) use ($types, $keytype) {
-                    $item->bayes = $types['bayes'][$keytype];
-                });
-            }
-            $items = $items->pluck('games')->collapse();
-            $games[]=$items;
-            unset($items);
+        $types['ids']=[];
+        foreach ($relations as $rel) {
+            $types['ids'][] = $rel['id'];
+            $types['bayes'][] = $rel['bayes'];
         }
-        $games = $games->collapse()->groupBy('id')->map(function ($row, $key) {
+        $attributes = Attribute::whereIn('id', $types['ids'])->with('games')->get();
+        foreach ($attributes as $keytype => $attribute) {
+            $attribute->games->each(function($item,$k) use ($types, $keytype) {
+                $item->bayes = $types['bayes'][$keytype];
+            });
+        }
+        $games = $attributes->pluck('games')->collapse()->groupBy('id')->map(function ($row, $key) {
             return [
                 'id' => $key,
                 'title' => $row[0]['title'],
@@ -122,7 +88,7 @@ class Recomendation extends Controller
             ];
         })->sortByDesc('gameweight')->values()->take(100);
         $result['status']='ok';
-        $result['relations']=$relations;
+        $result['relations']=$relations->groupBy('type');
         $result['games']=$games;
         return $result;
     }
