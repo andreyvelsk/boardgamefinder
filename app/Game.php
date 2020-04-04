@@ -15,6 +15,12 @@ class Game extends Model
         ]
     ];
     protected $hidden = ['pivot'];
+    
+    public function attributes()
+    {
+        return $this->belongsToMany('App\Attribute', 'games_attributes', 'idgame', 'idattribute');
+    }
+
     public function artists()
     {
         return $this->belongsToMany('App\Artist', 'games_artists', 'idgame', 'idartist');

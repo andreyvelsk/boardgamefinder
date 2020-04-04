@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Parse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Game;
+use App\Attribute;
+use App\AttributeType;
 use App\Category;
 use App\Mechanic;
 use App\Family;
@@ -67,106 +69,30 @@ class BGG extends Controller
             } catch (\Throwable $th) {
                 $result['apimessage'] = $th->getMessage();
             }
-    
             //SET game mechanics, categories and etc.
+            $classesToSave = array(
+                'boardgamecategory', 
+                'boardgamemechanic', 
+                'boardgamefamily', 
+                'boardgamedesigner',
+                'boardgameartist',
+                'boardgamepublisher'
+            );
             foreach ($xml->item->link as $link) {
-                $catid = NULL;
-                if($link['inbound'] != "true") $catid = $link['id']->__toString();
-                $item['id']=$catid;
-                $item['name']=$link['value'];
-    
-                switch ($link['type']) {
-                    case 'boardgamecategory':
-                            $relation = Category::firstOrNew(array('id' => $item['id']));
-                            $relation->name = $item['name'];
-                            $relation->save();
-                            try {
-                                $game->categories()->save($relation);
-                                $result['relations'][] =  "pivot saved: " . $item['name'];
-                            } catch (\Throwable $th) {
-                                $result['relations'][] = $th->getMessage();
-                            }
-                    break;
-    
-                    case 'boardgamemechanic':
-                        $relation = Mechanic::firstOrNew(array('id' => $item['id']));
-                        $relation->name = $item['name'];
-                        $relation->save();
-                        try {
-                            $game->mechanics()->save($relation);
-                            $result['relations'][] =  "pivot saved: " . $item['name'];
-                        } catch (\Throwable $th) {
-                            $result['relations'][] = $th->getMessage();
-                        }
-                    break;
-    
-                    case 'boardgamefamily':
-                        $relation = Family::firstOrNew(array('id' => $item['id']));
-                        $relation->name = $item['name'];
-                        $relation->save();
-                        try {
-                            $game->families()->save($relation);
-                            $result['relations'][] =  "pivot saved: " . $item['name'];
-                        } catch (\Throwable $th) {
-                            $result['relations'][] = $th->getMessage();
-                        }
-                    break;
-    
-                    case 'boardgamepublisher':
-                        $relation = Publisher::firstOrNew(array('id' => $item['id']));
-                        $relation->name = $item['name'];
-                        $relation->save();
-                        try {
-                            $game->publishers()->save($relation);
-                            $result['relations'][] =  "pivot saved: " . $item['name'];
-                        } catch (\Throwable $th) {
-                            $result['relations'][] = $th->getMessage();
-                        }
-                    break;
-    
-                    case 'boardgameartist':
-                        $relation = Artist::firstOrNew(array('id' => $item['id']));
-                        $relation->name = $item['name'];
-                        $relation->save();
-                        try {
-                            $game->artists()->save($relation);
-                            $result['relations'][] =  "pivot saved: " . $item['name'];
-                        } catch (\Throwable $th) {
-                            $result['relations'][] = $th->getMessage();
-                        }
-                    break;
-    
-                    case 'boardgamedesigner':
-                        $relation = Designer::firstOrNew(array('id' => $item['id']));
-                        $relation->name = $item['name'];
-                        $relation->save();
-                        try {
-                            $game->designers()->save($relation);
-                            $result['relations'][] =  "pivot saved: " . $item['name'];
-                        } catch (\Throwable $th) {
-                            $result['relations'][] = $th->getMessage();
-                        }
-                    break;
-
-                    case 'boardgameexpansion':
-                        if($item['id']) {
-                            $relation = Game::firstOrNew(array('idbgg' => $item['id']));
-                            if(!$relation->exists) {
-                                $relation->title = $item['name'];
-                                $relation->save();
-                            }
-                            try {
-                                $game->expansions()->save($relation);
-                                $result['relations'][] =  "pivot saved: " . $item['name'];
-                            } catch (\Throwable $th) {
-                                $result['relations'][] = $th->getMessage();
-                            }
-                        }
-                    break;
+                if(in_array ($link['type'], $classesToSave)) {
+                    $catid = NULL;
+                    if($link['inbound'] != "true") $catid = $link['id']->__toString();
+                    $item['id']=$catid;
+                    $item['name']=$link['value']->__toString();
+                    $item['type']=$link['type']->__toString();
                     
-                    default:
-                        # code...
-                    break;
+                    $attribute = $this->saveAttribute($item['type'], $item['id'], $item['name']);
+                    try {
+                        $game->attributes()->save($attribute);
+                        $result['apimessage'] = "api game ".$game->id." data saved";
+                    } catch (\Throwable $th) {
+                        $result['apimessage'] = $th->getMessage();
+                    }
                 }
             }
             return true;
@@ -201,16 +127,24 @@ class BGG extends Controller
 
         if($types){
             foreach ($types as $type) {
-                $relation = Type::firstOrNew(array('id' => $type->objectid));
-                $relation->name = $type->name;
-                $relation->save();
+                $attribute = $this->saveAttribute('boardgametype', $type->objectid, $type->name);
                 try {
-                    $game->types()->save($relation);
+                    $game->attributes()->save($attribute);
+                    $result['apimessage'] = "api game ".$game->id." data saved";
                 } catch (\Throwable $th) {
-    
+                    $result['apimessage'] = $th->getMessage();
                 }
             }
         }
 
+    }
+
+    private function saveAttribute($attrType, $attrId, $attrName) {
+        $attributeType = AttributeType::firstOrCreate(array('bggname' => $attrType));
+        $attribute = Attribute::firstOrNew(array('idbgg' => $attrId));
+        $attribute->bggname = $attrName;
+        $attribute->idattribute_type = $attributeType->id;
+        $attribute->save();
+        return $attribute;
     }
 }

@@ -34,6 +34,6 @@ class GamesExpansions extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('games_expansions');
     }
 }
