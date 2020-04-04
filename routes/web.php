@@ -26,17 +26,8 @@ Route::group(['domain'=>'admin.'.parse_url(config('app.url'), PHP_URL_HOST),'mid
             Route::post('{game}', ['uses'=>'Admin\GameEditController@postGame', 'as'=>'gameEdit']);
             Route::delete('{game}', ['uses'=>'Admin\GameEditController@deleteGame', 'as'=>'gameDelete']);
             //delete relations
-            Route::group(['prefix'=>'delete','middleware'=>'auth'], function() {
-                Route::delete('category/{game}', ['uses'=>'Admin\GameEditController@deleteCategory', 'as'=>'gameDeleteCategory']);
-                Route::delete('mechanic/{game}', ['uses'=>'Admin\GameEditController@deleteMechanic', 'as'=>'gameDeleteMechanic']);
-                Route::delete('family/{game}', ['uses'=>'Admin\GameEditController@deleteFamily', 'as'=>'gameDeleteFamily']);
-                Route::delete('publisher/{game}', ['uses'=>'Admin\GameEditController@deletePublisher', 'as'=>'gameDeletePublisher']);
-                Route::delete('type/{game}', ['uses'=>'Admin\GameEditController@deleteType', 'as'=>'gameDeleteType']);
-                Route::delete('artist/{game}', ['uses'=>'Admin\GameEditController@deleteArtist', 'as'=>'gameDeleteArtist']);
-                Route::delete('designer/{game}', ['uses'=>'Admin\GameEditController@deleteDesigner', 'as'=>'gameDeleteDesigner']);
-                Route::delete('expansion/{game}', ['uses'=>'Admin\GameEditController@deleteExpansion', 'as'=>'gameDeleteExpansion']);
+            Route::delete('attribute/{game}', ['uses'=>'Admin\GameEditController@deleteAttribute', 'as'=>'gameDeleteAttribute']);
         });
-    });
 });
 
 Route::group(['prefix'=>'parser'], function() {
