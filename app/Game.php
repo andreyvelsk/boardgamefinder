@@ -8,7 +8,7 @@ use Nicolaslopezj\Searchable\SearchableTrait;
 class Game extends Model
 {
     use SearchableTrait;
-    protected $fillable = ['title', 'idtesera', 'idbgg', 'yearpublished', 'bgggeekrating', 'bggavgrating', 'bggnumvotes', 'minplayers', 'maxplayers', 'suggestedplayers', 'minage', 'suggestedage', 'gameweight', 'minplaytime', 'maxplaytime', 'description', 'isexpansion']; 
+    protected $fillable = ['title', 'idtesera', 'idbgg', 'yearpublished', 'bgggeekrating', 'bggavgrating', 'bggnumvotes', 'minplayers', 'maxplayers', 'suggestedplayers', 'minage', 'suggestedage', 'gameweight', 'minplaytime', 'maxplaytime', 'description', 'isexpansion', 'thumbnail']; 
     protected $searchable = [
         'columns' => [
             'games.title' => 20

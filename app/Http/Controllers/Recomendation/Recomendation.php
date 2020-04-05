@@ -41,7 +41,6 @@ class Recomendation extends Controller
                     'id' => $key,
                     'name' => $row[0]['bggname'],
                     'avgrating' => $row->average('userrating'),
-                    'idtype' => $row[0]['idattribute_type'],
                     'type' => $row[0]->type->bggname,
                     'count' => $row->count(),
                     'bayes' => $this->getBayesValue($row->average('userrating'),$row->count())

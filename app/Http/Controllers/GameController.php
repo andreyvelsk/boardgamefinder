@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Game;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -47,8 +48,10 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        $result = Game::where('id', $id)->with('categories', 'mechanics', 'families', 'types', 'publishers')->firstOrFail();
-        return $result;
+        $game = Game::select('id', 'idbgg', 'title', 'yearpublished', 'bgggeekrating')->where('id', $id)->with(['attributes' => function($query) {
+            $query->join('attributes_types', 'attributes.idattribute_type', '=', 'attributes_types.id')->select('attributes.id', 'attributes.bggname as name', 'attributes_types.bggname as type');
+        }])->firstOrFail();
+        return($game);
     }
 
     /**

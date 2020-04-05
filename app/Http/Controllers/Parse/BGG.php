@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 use App\Game;
 use App\Attribute;
 use App\AttributeType;
-use App\Category;
-use App\Mechanic;
-use App\Family;
-use App\Publisher;
-use App\Artist;
-use App\Designer;
-use App\Type;
 
 class BGG extends Controller
 {
@@ -24,7 +17,7 @@ class BGG extends Controller
         }
         else echo "no idbgg";
         $input = $request->except('_token');
-        if($input['refresh'])
+        if(isset($input['refresh']))
             return redirect()->route('gameEdit', $game->id)->with('status','Загружены данные с bgg!');
     }
 
@@ -53,6 +46,7 @@ class BGG extends Controller
                 $isExpansion = false;
         }
         if($xmlGame['type']) {
+            $data['title'] = $xmlGame->name['value']->__toString();
             $data['thumbnail'] = $xmlGame->thumbnail->__toString();
             $data['yearpublished'] = intval($xmlGame->yearpublished['value']);
             $data['minplayers'] = intval($xmlGame->minplayers['value']);
@@ -61,7 +55,6 @@ class BGG extends Controller
             $data['minplaytime'] = intval($xmlGame->minplaytime['value']);
             $data['maxplaytime'] = intval($xmlGame->maxplaytime['value']);
             $data['isexpansion'] = $isExpansion;
-    
             $game->fill($data);
             try {
                 $game->save();
