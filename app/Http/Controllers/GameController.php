@@ -51,7 +51,10 @@ class GameController extends Controller
         $game = Game::select('id', 'idbgg', 'title', 'yearpublished', 'bgggeekrating')->where('id', $id)->with(['attributes' => function($query) {
             $query->join('attributes_types', 'attributes.idattribute_type', '=', 'attributes_types.id')->select('attributes.id', 'attributes.bggname as name', 'attributes_types.bggname as type');
         }])->firstOrFail();
-        return($game);
+        $attributes = $game->attributes->groupBy('type')->toArray();
+        $res = $game->makeHidden('attributes')->toArray();
+        $res['attributes'] = $attributes;
+        return($res);
     }
 
     /**

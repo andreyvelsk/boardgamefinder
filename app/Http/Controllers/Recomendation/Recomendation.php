@@ -87,7 +87,7 @@ class Recomendation extends Controller
             ];
         })->sortByDesc('gameweight')->values()->take(100);
         $result['status']='ok';
-        $result['relations']=$relations->groupBy('type');
+        $result['attributes']=$relations->groupBy('type');
         $result['games']=$games;
         return $result;
     }
