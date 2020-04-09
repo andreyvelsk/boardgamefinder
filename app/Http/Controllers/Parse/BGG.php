@@ -48,6 +48,7 @@ class BGG extends Controller
         if($xmlGame['type']) {
             $data['title'] = $xmlGame->name['value']->__toString();
             $data['thumbnail'] = $xmlGame->thumbnail->__toString();
+            $data['image'] = $xmlGame->image->__toString();
             $data['yearpublished'] = intval($xmlGame->yearpublished['value']);
             $data['minplayers'] = intval($xmlGame->minplayers['value']);
             $data['maxplayers'] = intval($xmlGame->maxplayers['value']);
