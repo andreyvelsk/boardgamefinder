@@ -15,6 +15,6 @@ class Attribute extends Model
     }
     public function games()
     {
-        return $this->belongsToMany('App\Game', 'games_attributes', 'idattribute', 'idgame')->select('id','title', 'bgggeekrating')->where('isexpansion', '!=', 1)->whereNotNull('idbgg');
+        return $this->belongsToMany('App\Game', 'games_attributes', 'idattribute', 'idgame')->select('id','title', 'bgggeekrating', 'thumbnail')->where('isexpansion', '!=', 1)->whereNotNull('idbgg');
     }
 }

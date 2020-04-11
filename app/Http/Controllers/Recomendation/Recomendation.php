@@ -81,6 +81,7 @@ class Recomendation extends Controller
             return [
                 'id' => $key,
                 'title' => $row[0]['title'],
+                'thumbnail' => $row[0]['thumbnail'],
                 'bgggeekrating' => (float)$row[0]['bgggeekrating'],
                 'matches' => $row->count(),
                 'gameweight' => $this->getBayesValue($row->avg('bayes'), $row->count())
