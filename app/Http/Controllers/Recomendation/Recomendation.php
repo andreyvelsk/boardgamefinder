@@ -68,29 +68,46 @@ class Recomendation extends Controller
         }
         $relations = $this->getRelations($request);
         $types['ids']=[];
+        $sqlCase='';
         foreach ($relations as $rel) {
             $types['ids'][] = $rel['id'];
             $types['bayes'][] = $rel['bayes'];
+            $sqlCase.='WHEN ga.idattribute='.(float)$rel['id'].' THEN '.(float)$rel['bayes'] .' ';
         }
-        $attributes = Attribute::whereIn('id', $types['ids'])->with('games')->get();
-        foreach ($attributes as $keytype => $attribute) {
-            $attribute->games->each(function($item,$k) use ($types, $keytype) {
-                $item->bayes = $types['bayes'][$keytype];
-            });
+
+        $games = DB::table('games_attributes AS ga')
+                ->leftJoin('games AS g', 'ga.idgame', '=', 'g.id')
+                ->whereIn('ga.idattribute', $types['ids'])
+                ->where('g.isexpansion', '!=', '1')
+                ->select(
+                    'ga.idgame',
+                    'g.title',
+                    'g.thumbnail',
+                    'ga.idattribute',
+                    DB::raw('
+                        (CASE '.$sqlCase.'
+                        ELSE 0
+                        END)
+                        AS bayes
+                    ')
+                )
+                ->get();
+        $returned=collect();
+        if(!$games->isEmpty()) {
+            $res = $games->groupBy('idgame')->map(function ($row, $key) {
+                return [
+                    'id' => $key,
+                    'title' => $row[0]->title,
+                    'thumbnail' => $row[0]->thumbnail,
+                    'matches' => $row->count(),
+                    'gameweight' => $this->getBayesValue($row->avg('bayes'), $row->count())
+                ];
+            })->sortByDesc('count')->values()->take(100);
+            $returned=$res;
         }
-        $games = $attributes->pluck('games')->collapse()->groupBy('id')->map(function ($row, $key) {
-            return [
-                'id' => $key,
-                'title' => $row[0]['title'],
-                'thumbnail' => $row[0]['thumbnail'],
-                'bgggeekrating' => (float)$row[0]['bgggeekrating'],
-                'matches' => $row->count(),
-                'gameweight' => $this->getBayesValue($row->avg('bayes'), $row->count())
-            ];
-        })->sortByDesc('gameweight')->values()->take(100);
         $result['status']='ok';
         $result['attributes']=$relations->groupBy('type');
-        $result['games']=$games;
-        return $result;
+        $result['games']=$returned;
+        return($result);
     }
 }
