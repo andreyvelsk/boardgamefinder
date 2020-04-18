@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Recomendation;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Validator;
 use App\Game;
 use App\Attribute;
-use App\Type;
-use App\Category;
-use App\Family;
-use App\Mechanic;
 class Recomendation extends Controller
 {
     private function getBayesValue($R, $v) {
@@ -25,23 +22,27 @@ class Recomendation extends Controller
             $garray['ids'][] =  $ugame['id'];
             $garray['ratings'][] = $ugame['rating'];
         }
-        $games = Game::whereIn('id', $garray['ids'])->select('id')->with('attributes')->get();
-        //set ratings to $games collection
-        foreach ($request->games as $key => $ugame) {
-            $game = $games->find($ugame['id']);
-            foreach ($game->attributes as $key => $category) {
-                $category->userrating=$ugame['rating'];
-            }
-        }
-        $relation = $games->pluck('attributes')->collapse();
+        $relation = DB::table('games_attributes AS ga')
+                ->leftJoin('attributes AS a', 'ga.idattribute', '=', 'a.id')
+                ->leftJoin('attributes_types AS att', 'a.idattribute_type', '=', 'att.id')
+                ->whereIn('ga.idgame', $garray['ids'])
+                ->whereIn('att.id', [1,2,3,7])
+                ->select(
+                    'ga.idgame', 
+                    'ga.idattribute', 
+                    'a.bggname', 
+                    'att.bggname AS typename', 
+                    DB::raw('10 AS userrating')
+                    )
+                ->get();
         $returned=collect();
         if(!$relation->isEmpty()) {
-            $res = $relation->groupBy('id')->map(function ($row, $key) {
+            $res = $relation->groupBy('idattribute')->map(function ($row, $key) {
                 return [
                     'id' => $key,
-                    'name' => $row[0]['bggname'],
+                    'name' => $row[0]->bggname,
                     'avgrating' => $row->average('userrating'),
-                    'type' => $row[0]->type->bggname,
+                    'type' => $row[0]->typename,
                     'count' => $row->count(),
                     'bayes' => $this->getBayesValue($row->average('userrating'),$row->count())
                 ];
