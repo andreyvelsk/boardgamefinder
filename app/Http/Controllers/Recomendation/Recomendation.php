@@ -61,8 +61,10 @@ class Recomendation extends Controller
         $v = Validator::make($request->all(), $rules);
         if ($v->fails()) {
             $errors = $v->errors();
-            $result['status']='bad';
+            $result['status']='ok';
             $result['message']=$errors->toJson();
+            $games = Game::orderBy('bgggeekrating', 'desc')->take(100)->get();
+            $result['games']=$games;
             return $result;
         }
         $relations = $this->getRelations($request);
