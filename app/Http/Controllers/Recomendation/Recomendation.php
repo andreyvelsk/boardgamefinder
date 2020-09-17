@@ -22,10 +22,9 @@ class Recomendation extends Controller
     public function getRelations (Request $request) {
         //get list of ids with ratings
         foreach ($request->games as $key => $ugame) {
-            $garray['ids'][] =  $ugame['id'];
-            $garray['ratings'][] = $ugame['rating'];
+            $ids[] =  $ugame['id'];
         }
-        $games = Game::whereIn('id', $garray['ids'])->select('id')->with('attributes')->get();
+        $games = Game::whereIn('id', $ids)->select('id')->with('attributes')->get();
         //set ratings to $games collection
         foreach ($request->games as $key => $ugame) {
             $game = $games->find($ugame['id']);
@@ -63,7 +62,7 @@ class Recomendation extends Controller
             $errors = $v->errors();
             $result['status']='ok';
             $result['message']=$errors->toJson();
-            $games = Game::orderBy('bgggeekrating', 'desc')->take(100)->get();
+            $games = Game::orderBy('bgggeekrating', 'desc')->take(50)->get();
             $result['games']=$games;
             return $result;
         }
@@ -73,7 +72,15 @@ class Recomendation extends Controller
             $types['ids'][] = $rel['id'];
             $types['bayes'][] = $rel['bayes'];
         }
-        $attributes = Attribute::whereIn('id', $types['ids'])->with('games')->get();
+        //get list of ids
+        foreach ($request->games as $key => $ugame) {
+            $games_ids[] =  $ugame['id'];
+        }
+        $attributes = Attribute::whereIn('id', $types['ids'])
+        ->with(['games' => function($query) use ($games_ids) {
+            $query->whereNotIn('id', $games_ids);
+        }])
+        ->get();
         foreach ($attributes as $keytype => $attribute) {
             $attribute->games->each(function($item,$k) use ($types, $keytype) {
                 $item->bayes = $types['bayes'][$keytype];
@@ -88,9 +95,9 @@ class Recomendation extends Controller
                 'matches' => $row->count(),
                 'gameweight' => $this->getBayesValue($row->avg('bayes'), $row->count())
             ];
-        })->sortByDesc('gameweight')->values()->take(100);
+        })->sortByDesc('gameweight')->values()->take(50);
         $result['status']='ok';
-        $result['attributes']=$relations->groupBy('type');
+        //$result['attributes']=$relations->groupBy('type');
         $result['games']=$games;
         return $result;
     }
